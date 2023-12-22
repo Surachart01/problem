@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&family=Lato&family=Tilt+Neon&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit&family=Lato&family=Tilt+Neon&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+* {
+    background-color: #f3f0f0;
+    font-family: 'Kanit', sans-serif;
+}
+
+.input{
+    border-radius: 0px;
+    border-top: 0px ;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 2px solid;
+    background-color: #f3f0f0;
+}
+
+.nb{
+    background-color: rgb(14, 21, 54);
+}
+
+.logo{
+background-color: #000000;
+}
+
+.content{
+    background-color: #f3f0f0;
+}
