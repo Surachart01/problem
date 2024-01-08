@@ -139,23 +139,23 @@ if ($page == "history") { ?>
     <script>
         let table = new DataTable('#tableProblem');
 
-        $(document).on("click","#staffDesc",function(){
+        $(document).on("click", "#btnDescStaff", function () {
             var staffId = $(this).data("staff");
             var formdata = new FormData()
-            formdata.append("staffId",staffId);
+            formdata.append("staffId", staffId);
 
             $.ajax({
-                url:"desc.staff.php",
-                type:"POST",
-                data:formdata,
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(data){
+                url: "desc.staff.php",
+                type: "POST",
+                data: formdata,
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function (data) {
                     Swal.fire({
-                        html:data,
-                        showConfirmButton:false,
-                        title:"รายละเอียดช่าง",
+                        html: data,
+                        showConfirmButton: false,
+                        title: "รายละเอียดช่าง",
                     })
                 }
 
@@ -354,40 +354,55 @@ if ($page == "repair") {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "ยืนยัน",
-                cancelButtonText: "ยกเลิก"
+                cancelButtonText: "ยกเลิก",
+                html: "<label>วันที่เข้าซ่อม</label><input type='datetime-local' id='startDate' class=' my-2 form-control'>"+
+                "<label>วันที่ซ่อมเสร็จ</label><input type='datetime-local' id='endDate' class='form-control'>"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var logId = $(this).data("log")
-                    var formdata = new FormData();
-                    formdata.append("logId", logId);
-                    $.ajax({
-                        url: "../backend/update.problem.php",
-                        type: "POST",
-                        data: formdata,
-                        dataType: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (data) {
-                            console.log(data)
-                            if (data == 1) {
-                                Swal.fire({
-                                    title: "รับงานเสร็จสิ้น",
-                                    icon: "success",
-                                    showConfirmButton: false,
-                                    timer: 900
-                                }).then(() => {
-                                    window.location.reload();
-                                })
-                            } else {
-                                Swal.fire({
-                                    title: "เกิดข้อผิดพลาด",
-                                    icon: "error",
-                                    showConfirmButton: false,
-                                    timer: 900
-                                })
+                    var startDate = $('#startDate').val()
+                    var endDate = $('#endDate').val()
+                    if (startDate === "" || endDate === "") {
+                        Swal.fire({
+                            title:'โปรดเลือกวันที่เริ่มซ่อมและวันทีสิ้นสุด',
+                            showConfirmButton:false,
+                            timer:900,
+                            icon:"error"
+                        })
+                    } else {
+                        var logId = $(this).data("log")
+                        var formdata = new FormData();
+                        formdata.append("logId", logId)
+                        formdata.append("startDate", startDate)
+                        formdata.append("endDate", endDate)
+                        $.ajax({
+                            url: "../backend/update.problem.php",
+                            type: "POST",
+                            data: formdata,
+                            dataType: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (data) {
+                                if (data == 1) {
+                                    Swal.fire({
+                                        title: "รับงานเสร็จสิ้น",
+                                        icon: "success",
+                                        showConfirmButton: false,
+                                        timer: 900
+                                    }).then(() => {
+                                        window.location.reload();
+                                    })
+                                } else {
+                                    Swal.fire({
+                                        title: "เกิดข้อผิดพลาด",
+                                        icon: "error",
+                                        showConfirmButton: false,
+                                        timer: 900
+                                    })
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
+
                 }
             });
 
@@ -802,7 +817,6 @@ if ($page == "user") { ?>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ชื่อ</th>
-                        <th scope="col">email</th>
                         <th scope="col">tel</th>
                         <th scope="col">status</th>
                         <th></th>
@@ -814,24 +828,33 @@ if ($page == "user") { ?>
                     $qUser = $conn->query($sqlUser);
                     $dataUser = $qUser->fetch_object();
                     $i = 1;
-                    while ($dataUser = $qUser->fetch_object()) { 
-                            if($dataUser->status == "9"){
-                                $status = "ผู้ดูแลระบบ";
-                            }else if($dataUser->status == "5"){
-                                $status = "ช่าง";
-                            }else{
-                                $status = "ผู้ใช้งาน";
-                            }
+                    while ($dataUser = $qUser->fetch_object()) {
+                        if ($dataUser->status == "9") {
+                            $status = "ผู้ดูแลระบบ";
+                        } else if ($dataUser->status == "5") {
+                            $status = "ช่าง";
+                        } else {
+                            $status = "ผู้ใช้งาน";
+                        }
                         ?>
                         <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $dataUser->name ?></td>
-                            <td><?php echo $dataUser->email ?></td>
-                            <td><?php echo $dataUser->tel ?></td>
-                            <td><?php echo $status; ?></td>
-                            <td><button class="btn btn-primary" id="btnDesc" data-id="<?php echo $dataUser->id; ?>">รายละเอียด</button></td>
+                            <td>
+                                <?php echo $i; ?>
+                            </td>
+                            <td>
+                                <?php echo $dataUser->name ?>
+                            </td>
+                            <td>
+                                <?php echo $dataUser->tel ?>
+                            </td>
+                            <td>
+                                <?php echo $status; ?>
+                            </td>
+                            <td><button class="btn btn-primary" id="btnDesc"
+                                    data-id="<?php echo $dataUser->id; ?>">รายละเอียด</button></td>
                         </tr>
-                    <?php $i++; } ?>
+                        <?php $i++;
+                    } ?>
                 </tbody>
             </table>
         </div>
@@ -840,160 +863,158 @@ if ($page == "user") { ?>
 
     <script>
 
-        $(document).on("click","#btnUpdateUser",function(){
+        $(document).on("click", "#btnUpdateUser", function () {
             var userId = $(this).data("id");
             var name = $('#name').val();
             var email = $('#email').val();
             var password = $('#password').val();
             var tel = $('#tel').val();
             var formdata = new FormData();
-            formdata.append("name",name);
-            formdata.append("email",email);
-            formdata.append("password",password);
-            formdata.append("tel",tel);
-            formdata.append("userId",userId);
+            formdata.append("name", name);
+            formdata.append("email", email);
+            formdata.append("password", password);
+            formdata.append("tel", tel);
+            formdata.append("userId", userId);
 
             $.ajax({
-                url:"../backend/update.user.php",
-                type:"POST",
-                data:formdata,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success: function(data){
-                    if(data == 1){
+                url: "../backend/update.user.php",
+                type: "POST",
+                data: formdata,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 1) {
                         Swal.fire({
-                            title:"แก้ไขผู้ใข้เสร็ตสิ้น",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"success"
-                        }).then( () => {
+                            title: "แก้ไขผู้ใข้เสร็ตสิ้น",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "success"
+                        }).then(() => {
                             window.location.reload();
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดข้อผิดพลาด",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"error"
+                            title: "เกิดข้อผิดพลาด",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "error"
                         })
                     }
                 }
             })
-            
+
         })
 
-        $(document).on("click","#btnInsertUser",function(){
+        $(document).on("click", "#btnInsertUser", function () {
             var name = $('#name').val();
-            var email = $('#email').val();
             var password = $('#password').val();
             var tel = $('#tel').val();
             var status = $('#status').val();
             var formdata = new FormData();
-            formdata.append("name",name);
-            formdata.append("email",email);
-            formdata.append("password",password);
-            formdata.append("tel",tel);
-            formdata.append("status",status);
+            formdata.append("name", name);
+            formdata.append("password", password);
+            formdata.append("tel", tel);
+            formdata.append("status", status);
 
             $.ajax({
-                url:"../backend/insert.user.php",
-                type:"POST",
-                data:formdata,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success:function(data){
-                    if(data == 1){
+                url: "../backend/insert.user.php",
+                type: "POST",
+                data: formdata,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 1) {
                         Swal.fire({
-                            title:"เพิ่มผู้ใข้เสร็ตสิ้น",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"success"
-                        }).then( () => {
+                            title: "เพิ่มผู้ใข้เสร็ตสิ้น",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "success"
+                        }).then(() => {
                             window.location.reload();
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดข้อผิดพลาด",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"error"
+                            title: "เกิดข้อผิดพลาด",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "error"
                         })
                     }
                 }
             })
         })
 
-        $(document).on("click",".chgsta",function(){
+        $(document).on("click", ".chgsta", function () {
             var status = $(this).data("status");
             var userId = $(this).data("id");
             var formdata = new FormData();
-            formdata.append("status",status);
-            formdata.append("userId",userId);
+            formdata.append("status", status);
+            formdata.append("userId", userId);
 
             $.ajax({
-                url:"../backend/update.status.php",
-                type:"POST",
-                data:formdata,
-                dataType:"json",
-                contentType:false,
-                processData:false,
-                success:function(data){
-                    if(data == 1){
+                url: "../backend/update.status.php",
+                type: "POST",
+                data: formdata,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 1) {
                         Swal.fire({
-                            title:"แก้ไขเสร็จสิ้น",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"success"
-                        }).then( () => {
+                            title: "แก้ไขเสร็จสิ้น",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "success"
+                        }).then(() => {
                             window.location.reload();
                         })
-                    }else{
+                    } else {
                         Swal.fire({
-                            title:"เกิดขเ้อผิดพลาด",
-                            showConfirmButton:false,
-                            timer:1000,
-                            icon:"error"
+                            title: "เกิดขเ้อผิดพลาด",
+                            showConfirmButton: false,
+                            timer: 1000,
+                            icon: "error"
                         })
                     }
                 }
             })
         })
 
-        $(document).on("click","#insertUser",function(){
+        $(document).on("click", "#insertUser", function () {
             $.ajax({
-                url:"insert.page.php",
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(data){
+                url: "insert.page.php",
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function (data) {
                     Swal.fire({
-                        html:data,
-                        showConfirmButton:false,
-                        title:"เพิ่มผู้ใช้งาน",
+                        html: data,
+                        showConfirmButton: false,
+                        title: "เพิ่มผู้ใช้งาน",
                     })
                 }
             })
         })
 
-        $(document).on("click","#btnDesc",function(){
+        $(document).on("click", "#btnDesc", function () {
             var userId = $(this).data("id");
             var formdata = new FormData();
-            formdata.append("userId",userId);
+            formdata.append("userId", userId);
 
             $.ajax({
-                url:"desc.user.php",
-                type:"POST",
-                data:formdata,
-                dataType:"html",
-                contentType:false,
-                processData:false,
-                success:function(data){
+                url: "desc.user.php",
+                type: "POST",
+                data: formdata,
+                dataType: "html",
+                contentType: false,
+                processData: false,
+                success: function (data) {
                     Swal.fire({
-                        title:"รายละเอียด",
-                        html:data,
-                        showConfirmButton:false,
+                        title: "รายละเอียด",
+                        html: data,
+                        showConfirmButton: false,
                     })
                 }
             })

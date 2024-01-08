@@ -61,9 +61,12 @@ if (isset($_SESSION['iUser'])) {
 
 <body>
     <div class="row ">
-        <div class="col-12 navv pe-4 text-dark py-3">
-            <div class="d-flex justify-content-end">
-                <div class="me-3 d-flex ">
+        <div class="col-12 navv pe-4 text-dark ">
+            <div class="d-flex justify-content-between">
+                <div class="ms-4">
+                <img src="../image/logo.png" width="65px" height="70px"  alt="">
+                </div>
+                <div class="me-3 d-flex my-auto">
                     <span class="ms-3 me-4">
                         <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">

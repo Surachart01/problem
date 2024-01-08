@@ -1,5 +1,6 @@
 <?php 
     session_start();
+    $date = date("d-m-Y H:i:s");
     include("../include/connect.inc.php");
     $codeFix = $_POST['codeFix'];
     $desc = $_POST['desc'];

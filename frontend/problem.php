@@ -80,14 +80,18 @@ if (isset($_SESSION['iUser'])) {
 
     </div>
     <nav class="fixed-top ">
-        <div class="d-flex justify-content-end nb pe-xs-3">
+        <div class="d-flex justify-content-between nb pe-xs-3">
+            <div class="ms-4">
+                <img src="../image/logo.png" width="56px" height="56px" class="nb"  alt="">
+            </div>
             <div class="navbar navbar-expand-md me-md-5 me-xs-2 py-md-3 py-xs-3 nb">
-                <a class="nav-link dropdown-toggle text-light me-5" href="#" id="navbarDarkDropdownMenuLink" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-light me-5" href="#" id="navbarDarkDropdownMenuLink"
+                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <?php echo $user->name; ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light me-5">
-                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    <li><a class="dropdown-item" href="profile.php">โปรไฟล์</a></li>
+                    <li><a class="dropdown-item" href="logout.php">ออกจากระบบ</a></li>
                 </ul>
             </div>
 
@@ -159,7 +163,7 @@ if (isset($_SESSION['iUser'])) {
             var page = urlParams.get('page');
             var formdata = new FormData();
             formdata.append("page", page);
-            
+
             $.ajax({
                 url: "page.all.php",
                 type: "POST",
@@ -170,7 +174,7 @@ if (isset($_SESSION['iUser'])) {
                 success: function (data) {
                     $('#iCen').html(data);
                 }
-            }).then( () => {
+            }).then(() => {
                 hideSpinner();
             })
 

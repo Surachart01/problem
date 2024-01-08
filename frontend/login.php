@@ -18,7 +18,7 @@
     <div class="row mt-5">
         <div class="col-12">
             <div class="d-flex justify-content-center mt-5">
-                <h2>Login</h2>
+                <img src="../image/logo.png" alt="">
             </div>
             <div class="mx-5">
                 <div class="login">

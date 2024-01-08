@@ -30,6 +30,10 @@ if($data->status == 0){ $status = "รอช่างรับปัญหา ";
         <input type="text" class="form-control" value="<?php echo $data->room ?> " disabled>
         <label for="">สถานะ</label>
         <input type="text" class="form-control" value="<?php echo $status ?>" id="" disabled>
+        <label for="">วันที่เข้าซ่อม</label>
+        <input type="datetime-local" value="<?php echo $data->startDate ?>" class="form-control" disabled>
+        <label for="">วันที่ซ่อมเสร็จ</label>
+        <input type="datetime-local" value="<?php echo $data->endDate ?>" class="form-control" disabled>
         <div class=""><input type="checkbox" class="me-2 form-check-input" disabled <?php echo $type ?> id="checkD">
         <span class="me-5 text-danger">ด่วนที่สุด</span></div>
     </div>

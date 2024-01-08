@@ -16,8 +16,6 @@
 ?>
 <label for="">ชื่อ</label>
 <input type="text" class="form-control my-3" id="name" value="<?php echo $dataUser->name ?>">
-<label for="">อีเมล์</label>
-<input type="text" class="form-control my-3" id="email" value="<?php echo $dataUser->email ?>">
 <label for="">รหัสผ่าน</label>
 <input type="text" class="form-control my-3" id="password" value="<?php echo $dataUser->password ?>">
 <label for="">เบอร์โทร</label>
