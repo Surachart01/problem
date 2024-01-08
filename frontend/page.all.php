@@ -66,7 +66,7 @@ if ($page == "problem") { ?>
                     } else {
                         Swal.fire({
                             position: "top-end",
-                            icon: "success",
+                            icon: "error",
                             showConfirmButton: false,
                             title: "เกิดข้อผิดพลาด",
                             timer: 800
@@ -89,6 +89,7 @@ if ($page == "history") { ?>
                         <th scope="col">รายการ</th>
                         <th scope="col">เลขครุภัณฑ์</th>
                         <th scope="col">ขั้นตอน</th>
+                        <th scope="col">เวลา</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -119,6 +120,9 @@ if ($page == "history") { ?>
                                 <?php echo $status ?>
                             </td>
                             <td>
+                                <?php echo $data->date ?>
+                            </td>
+                            <td>
                                 <button class="btn btn-success " id="descript"
                                     data-log="<?php echo $data->id ?>">รายละเอียด</button>
                             </td>
@@ -135,6 +139,28 @@ if ($page == "history") { ?>
     <script>
         let table = new DataTable('#tableProblem');
 
+        $(document).on("click","#staffDesc",function(){
+            var staffId = $(this).data("staff");
+            var formdata = new FormData()
+            formdata.append("staffId",staffId);
+
+            $.ajax({
+                url:"desc.staff.php",
+                type:"POST",
+                data:formdata,
+                dataType:"html",
+                contentType:false,
+                processData:false,
+                success:function(data){
+                    Swal.fire({
+                        html:data,
+                        showConfirmButton:false,
+                        title:"รายละเอียดช่าง",
+                    })
+                }
+
+            })
+        })
         $(document).on("click", "#descript", function () {
             var logId = $(this).data("log");
             var formdata = new FormData();
@@ -257,6 +283,7 @@ if ($page == "repair") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col" style="width:98px">เวลา</th>
                 <th scope="col" style="width:98px"></th>
                 <th scope="col" style="width:98px"></th>
             </tr>
@@ -280,6 +307,9 @@ if ($page == "repair") {
                     </td>
                     <td style="width:98px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:98px">
+                        <?php echo $data->date ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
@@ -379,6 +409,7 @@ if ($page == "problemrepair") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col" style="width:98px">เวลา</th>
                 <th scope="col" style="width:98px"></th>
                 <th scope="col" style="width:98px"></th>
         </thead>
@@ -399,6 +430,9 @@ if ($page == "problemrepair") {
                     </td>
                     <td style="width:78px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:78px">
+                        <?php echo $data->date ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
@@ -496,6 +530,7 @@ if ($page == "historyrepair") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col" style="width:98px">เวลา</th>
                 <th scope="col" style="width:98px"></th>
         </thead>
         <tbody>
@@ -515,6 +550,9 @@ if ($page == "historyrepair") {
                     </td>
                     <td style="width:78px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:78px">
+                        <?php echo $data->date; ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
@@ -559,6 +597,7 @@ if ($page == "showAdmin") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col">เวลา</th>
                 <th scope="col" style="width:98px"></th>
         </thead>
         <tbody>
@@ -578,6 +617,9 @@ if ($page == "showAdmin") {
                     </td>
                     <td style="width:78px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:98px">
+                        <?php echo $data->date; ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
@@ -623,6 +665,7 @@ if ($page == "processAdmin") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col">เวลา</th>
                 <th scope="col" style="width:98px"></th>
         </thead>
         <tbody>
@@ -642,6 +685,9 @@ if ($page == "processAdmin") {
                     </td>
                     <td style="width:78px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:98px">
+                        <?php echo $data->date; ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
@@ -688,6 +734,7 @@ if ($page == "successAdmin") {
                 <th scope="col" style="width:98px">รายการ</th>
                 <th scope="col" style="width:98px">ห้อง</th>
                 <th scope="col" style="width:98px">สถานะ</th>
+                <th scope="col">เวลา</th>
                 <th scope="col" style="width:98px"></th>
         </thead>
         <tbody>
@@ -707,6 +754,9 @@ if ($page == "successAdmin") {
                     </td>
                     <td style="width:78px">
                         <?php echo $type; ?>
+                    </td>
+                    <td style="width:98px">
+                        <?php echo $data->date; ?>
                     </td>
                     <td style="width:98px"><button class="btn btn-warning" id="descProblem"
                             data-log="<?php echo $data->id; ?>">รายละเอียด</button></td>
